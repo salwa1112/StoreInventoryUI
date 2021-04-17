@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <!--Selected Store Name will be printed as the titel of the page-->
+    <title>Store Name: #{inventoryBean.store.name} </title>
+    <!-- Link of styling -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+</h:head>
+
+<h:body>
+    <f:metadata>
+        <f:viewParam name="store_id" id="store_id" value="#{inventoryBean.storeId}"/>
+    </f:metadata>
+
+    <div class="container">
+        <h:form>
+            <!--Selected Store Name will be printed as the header of the page-->
+            <h1><strong>Store Location:</strong> #{inventoryBean.store.name}</h1>
+            <!--Selected store location will be printed as the header of the page-->
+            <small><strong>Store Location:</strong> #{inventoryBean.store.location}</small>
+        </h:form>
+        <br/>
+
+        <!-- form to add product to the inventory-->
+        <h2>Add Product to Store Inventory</h2>
+
+        <h:form id="frm-register" style="width: 300px" prependId="false">
+            <div class="form-group">
+                <!-- Product name-->
+                <label for="name">Product Name: </label>
+                <h:inputText id="name" styleClass="form-control" value="#{inventoryBean.inventory.name}"
+                             required="true" requiredMessage="required field"/>
+                <h:message for="name" style="color: red"></h:message>
+            </div>
+
+            <div class="form-group">
+                <!-- Sport name-->
+                <label for="sport">Sport Name: </label>
+                <h:inputText id="sport" styleClass="form-control" value="#{inventoryBean.inventory.sport}"
+                             required="true" requiredMessage="required field"/>
+                <h:message for="sport" style="color: red"></h:message>
+            </div>
+
+            <div class="form-group">
+                <!-- Product Quantity-->
+                <label for="quantity">Quantity of Product: </label>
+                <h:inputText id="quantity" styleClass="form-control" value="#{inventoryBean.inventory.quantity}"
+                             required="true" requiredMessage="required field">
+                </h:inputText>
+                <h:message for="quantity" style="color: red"></h:message>
+            </div>
+
+            <div class="form-group">
+                <!-- Price of product-->
+                <label for="unit-price">Unit Price of Product: </label>
+                <h:inputText id="unit-price" styleClass="form-control" value="#{inventoryBean.inventory.pricePerUnit}"
+                             required="true" requiredMessage="required field"
+                             validatorMessage="unit price is more than 0.01">
+                    <f:validateDoubleRange minimum="0.01" maximum="1000000000000.00"/>
+                </h:inputText>
+                <h:message for="unit-price" style="color: red"></h:message>
+            </div>
+
+            <!-- Button to save the product to inventory-->
+            <h:commandButton id="btn" styleClass="btn btn-success" value="Save Product">
+                <f:ajax execute="@form" render="@all" listener="#{inventoryBean.productDetails}"/>
+            </h:commandButton>
+        </h:form>
+        <hr/>
+
+        <!-- Form to show the details of inventory of the store-->
+        <h:form id="frmInventories">
+            <h:panelGroup id="wrapper">
+                <h:dataTable id="myDataTable" value="#{inventoryBean.ivList}" var="inventory"
+                             styleClass="table table-light table-striped table-bordered table-hover">
+                    <h:column>
+                        <f:facet name="header">Product Name</f:facet>#{inventory.name}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Sport Name</f:facet>#{inventory.sport}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Unit Price</f:facet>#{inventory.pricePerUnit}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Quantity of Product</f:facet>#{inventory.quantity}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Date and Time of Creation</f:facet>#{inventory.created}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Date and Time of Update</f:facet>#{inventory.updated}
+                    </h:column>
+                    <h:column>
+                        <!-- Remove product from the inventory-->
+                        <f:facet name="header">Remove Product</f:facet>
+                        <h:commandLink>
+                            <h:graphicImage value="image/icons8-delete-bin-32.png" width="15" height="15"/>
+                            <f:attribute name="itemToDelete" value="#{inventory.id}"/>
+                            <f:ajax listener="#{inventoryBean.deleteItem}" execute="@this" render="frmInventories"/>
+                        </h:commandLink>
+                    </h:column>
+                </h:dataTable>
+            </h:panelGroup>
+        </h:form>
+
+    </div>
+</h:body>
+</html>

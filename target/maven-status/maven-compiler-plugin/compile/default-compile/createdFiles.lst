@@ -1,0 +1,4 @@
+com\salwa\assignment2\interceptor\Logged.class
+com\salwa\assignment2\interceptor\LoggedInterceptor.class
+com\salwa\assignment2\InventoryBean.class
+com\salwa\assignment2\StoreBean.class
