@@ -34,7 +34,7 @@ public class InventoryBean implements Serializable {
     private Store store = new Store();
     private Inventory inventory = new Inventory();
     private List<Inventory> ivList = new ArrayList<>();
-    //    private transient Context context;
+
     private boolean isAscSort = true;
 
     //Inject ejb
@@ -65,6 +65,7 @@ public class InventoryBean implements Serializable {
         this.store = store;
     }
 
+
     public List<Inventory> getIvList() {
         this.ivList = inventoryService.getInventoryByStoreId(storeId);
         //sort by update date
@@ -72,10 +73,6 @@ public class InventoryBean implements Serializable {
         return ivList;
     }
 
-    public void setIivList(Inventory inventory) {
-        this.ivList = inventoryService.getInventoryByStoreId(storeId);
-        this.ivList = ivList.stream().sorted(Comparator.comparing(Inventory::getUpdated).reversed()).collect(Collectors.toList());
-    }
 
     public Inventory getInventory() {
         return inventory;
@@ -101,17 +98,16 @@ public class InventoryBean implements Serializable {
         inventory = new Inventory();
     }
 
+    //get details data for product from store Service
+    private void getDetailsProduct() throws NamingException {
+        this.store = storeService.findStoreById(storeId);
+    }
 
     //Method for deleting product
     public void deleteItem(AjaxBehaviorEvent event) throws NamingException {
         Long itemToDelete = (Long) event.getComponent().getAttributes().get("itemToDelete");
         inventoryService.removeInventory(itemToDelete);
         getDetailsProduct();
-    }
-
-    //get details data for product from store Service
-    private void getDetailsProduct() throws NamingException {
-        this.store = storeService.findStoreById(storeId);
     }
 
 }

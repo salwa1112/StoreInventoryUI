@@ -37,12 +37,9 @@ public class StoreBean implements Serializable {
     }
 
     public List<Store> getStores() throws NamingException {
-
         stores = storeService.getStoreList();
-
         return stores;
     }
-
 
     //add store
     public void addStore(ActionEvent event) throws NamingException {
@@ -50,10 +47,4 @@ public class StoreBean implements Serializable {
         store = new Store();
     }
 
-    //delete store
-    public void deleteStore(AjaxBehaviorEvent event) throws NamingException {
-        Long itemToDelete = (Long) event.getComponent().getAttributes().get("itemToDeleteStore");
-        System.out.println("to-delete");
-        storeService.removeStore(itemToDelete);
-    }
 }
